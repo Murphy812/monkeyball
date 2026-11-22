@@ -1,0 +1,8 @@
+- id: otto
+  name: { ru: Отто, en: Otto }
+- id: betty
+  name: { ru: Бетти, en: Betty }
+- id: zhora
+  name: { ru: Жора, en: Zhora }
+- id: margo
+  name: { ru: Марго, en: Margo }
