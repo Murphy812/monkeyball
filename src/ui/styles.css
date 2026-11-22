@@ -1,0 +1,111 @@
+/* Prototype look: grey rectangles and a readable font (design doc, scope v0.1).
+   Layout works in portrait and landscape so orientation can be decided after playtests. */
+:root {
+  --bg: #e9e9e7;
+  --panel: #ffffff;
+  --block: #d6d6d3;
+  --ink: #1b1b1b;
+  --muted: #6b6b68;
+  --line: #b9b9b5;
+  --accent: #1b1b1b;
+  --danger: #b3261e;
+  --radius: 8px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1b1b;
+    --panel: #262625;
+    --block: #3a3a38;
+    --ink: #ececea;
+    --muted: #a3a39f;
+    --line: #4a4a47;
+    --accent: #ececea;
+    --danger: #ff8a80;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--bg); }
+button { font: inherit; color: inherit; }
+
+.app { max-width: 960px; margin: 0 auto; padding: 0 16px 24px; min-height: 100vh; display: flex; flex-direction: column; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; gap: 8px; }
+.topbar-title { font-weight: 600; }
+.topbar-right { display: flex; gap: 12px; }
+.link { background: none; border: none; padding: 4px 0; color: var(--muted); cursor: pointer; text-decoration: underline; }
+
+.screen { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.muted { color: var(--muted); margin: 0; }
+.small { font-size: 13px; }
+.notice { background: var(--block); padding: 8px 12px; border-radius: var(--radius); }
+
+.menu { align-items: center; justify-content: center; text-align: center; }
+.menu h1 { font-size: 40px; margin: 0; }
+.menu-buttons { display: flex; flex-direction: column; gap: 12px; width: min(320px, 100%); margin-top: 16px; }
+.seed { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: var(--muted); }
+.seed input { width: 140px; font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); color: var(--ink); }
+
+/* game layout: HUD on top in portrait, at the side in landscape */
+.game { display: grid; grid-template-columns: 1fr; gap: 16px; align-content: start; }
+@media (min-aspect-ratio: 4/3) and (min-width: 720px) {
+  .game { grid-template-columns: 300px 1fr; align-items: start; }
+}
+
+.hud { background: var(--panel); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+.stats { display: flex; gap: 8px; }
+.stat { flex: 1; background: var(--block); border-radius: 6px; padding: 6px 8px; display: flex; flex-direction: column; min-width: 0; }
+.stat-label { font-size: 12px; color: var(--muted); }
+.stat-value { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.threat-track { display: flex; align-items: center; height: 28px; background: var(--block); border-radius: 6px; overflow: hidden; }
+.threat-hunt { background: var(--ink); color: var(--bg); font-size: 12px; padding: 0 8px; height: 100%; display: flex; align-items: center; white-space: nowrap; }
+.threat-gap { height: 2px; background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px); transition: width 0.9s ease; }
+.threat-wagon { padding: 0 6px; font-size: 18px; }
+.threat-label { font-size: 12px; color: var(--muted); }
+.threat.danger .threat-hunt { background: var(--danger); color: #fff; }
+.threat.danger .threat-label { color: var(--danger); font-weight: 600; }
+
+.horses { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+.horse { display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+.horse.gone { opacity: 0.35; text-decoration: line-through; }
+.horse.spent .bar { outline: 1px solid var(--danger); }
+.bar { height: 6px; background: var(--block); border-radius: 3px; overflow: hidden; }
+.bar-fill { display: block; height: 100%; background: var(--ink); transition: width 0.6s ease; }
+
+.card-area { display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--panel); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 14px; min-height: 260px; }
+.card h2 { margin: 0; }
+.card h3 { margin: 8px 0 0; font-size: 15px; }
+.card-text { font-size: 19px; line-height: 1.4; margin: 0; flex: 1; }
+.choices { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 560px) { .choices { grid-template-columns: 1fr 1fr; } }
+.choice { background: var(--block); border: 1px solid transparent; border-radius: var(--radius); padding: 14px 12px; cursor: pointer; text-align: left; line-height: 1.3; min-height: 52px; }
+.choice:hover:not(:disabled) { border-color: var(--ink); }
+.choice:disabled { opacity: 0.45; cursor: default; }
+.choice.primary { background: var(--accent); color: var(--bg); }
+.event { margin: 0; padding: 6px 10px; border-left: 3px solid var(--ink); background: var(--block); border-radius: 0 6px 6px 0; }
+.diffs { margin: 0; font-variant-numeric: tabular-nums; }
+
+.timer { position: relative; height: 22px; background: var(--block); border-radius: 6px; overflow: hidden; }
+.timer-fill { position: absolute; inset: 0 auto 0 0; background: var(--danger); opacity: 0.35; }
+.timer-label { position: relative; font-size: 12px; padding: 0 8px; line-height: 22px; font-variant-numeric: tabular-nums; }
+
+.travel { align-items: flex-start; justify-content: center; }
+.road { width: 100%; height: 28px; border-bottom: 2px dashed var(--line); position: relative; overflow: hidden; }
+.wagon { position: absolute; bottom: 2px; font-size: 20px; animation: drive 1.1s linear forwards; }
+@keyframes drive { from { left: 0; } to { left: calc(100% - 40px); } }
+
+.history { margin: 0; padding-left: 30px; display: flex; flex-direction: column; gap: 6px; max-height: 50vh; overflow: auto; font-size: 14px; line-height: 1.4; }
+
+.errors ul { padding-left: 18px; }
+.errors li.error, .debug li.error { color: var(--danger); }
+.errors li.warning, .debug li.warning { color: var(--muted); }
+
+.debug { position: fixed; right: 0; top: 0; bottom: 0; width: min(380px, 100%); background: var(--panel); border-left: 1px solid var(--line); padding: 12px 16px; overflow: auto; display: flex; flex-direction: column; gap: 10px; z-index: 10; box-shadow: -4px 0 16px rgba(0,0,0,.12); }
+.debug-head { display: flex; justify-content: space-between; align-items: center; }
+.debug pre { background: var(--block); padding: 8px; border-radius: 6px; overflow: auto; margin: 0; white-space: pre-wrap; }
+.debug-row { display: flex; gap: 8px; }
+.debug-row select { flex: 1; min-width: 0; }
+.debug-preview .card { min-height: 0; border: 1px solid var(--line); }

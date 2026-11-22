@@ -1,0 +1,4 @@
+# speed — множитель скорости каравана в этом биоме
+- id: forest
+  name: { ru: Лес, en: Forest }
+  speed: 0.9

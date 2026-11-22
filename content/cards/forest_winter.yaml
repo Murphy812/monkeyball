@@ -1,0 +1,157 @@
+# Дорожные карточки: лес, зима.
+# Временные тексты-заглушки, чтобы проверить петлю. Нарративный дизайнер заменит их.
+# {horse} в тексте подставляется именем случайной лошади (субъект карточки).
+# Формат описан в docs/content-format.md.
+
+- id: fallen_pine
+  biomes: [forest]
+  text:
+    ru: Поперёк дороги лежит сосна, занесённая снегом по самую макушку.
+    en: A pine lies across the road, buried in snow to the tip.
+  choices:
+    - label: { ru: Рубить и растаскивать, en: Chop it and haul it away }
+      effects: { stamina: -8 }
+    - label: { ru: Искать объезд, en: Look for a detour }
+      effects: { miles: -6 }
+
+- id: woodcutters
+  biomes: [forest]
+  text:
+    ru: Лесорубы у костра просят показать им что-нибудь. Платят дровами и похлёбкой.
+    en: Woodcutters by a fire ask for a little show. They pay in firewood and stew.
+  choices:
+    - label: { ru: "{horse} жонглирует шишками", en: "{horse} juggles pine cones" }
+      effects: { subjectStamina: -10, stamina: 6, threat: -3 }
+    - label: { ru: Вежливо проехать мимо, en: Politely ride past }
+      effects: {}
+
+- id: wolves
+  biomes: [forest]
+  text:
+    ru: В чаще воют волки. Лошади прижимают уши.
+    en: Wolves howl in the thicket. The horses flatten their ears.
+  choices:
+    - label: { ru: Гнать во весь опор, en: Gallop flat out }
+      effects: { stamina: -10, miles: 5 }
+    - label: { ru: Развести костёр и переждать, en: Build a fire and wait }
+      effects: { threat: -6, stamina: 5 }
+
+- id: hermit_path
+  biomes: [forest]
+  requires: { minMoney: 20 }
+  text:
+    ru: Отшельник в медвежьей шкуре знает короткую тропу. Берёт двадцать монет.
+    en: A hermit in a bearskin knows a shortcut. Twenty coins.
+  choices:
+    - label: { ru: Заплатить, en: Pay him }
+      effects: { money: -20, miles: 10 }
+    - label: { ru: Не доверять, en: Don't trust him }
+      effects: {}
+
+- id: frozen_stream
+  biomes: [forest]
+  text:
+    ru: Ручей замёрз, но лёд выглядит тонким. {horse} нюхает его с сомнением.
+    en: The stream is frozen, but the ice looks thin. {horse} sniffs it doubtfully.
+  choices:
+    - label: { ru: Переходить по льду, en: Cross the ice }
+      effects: { miles: 4 }
+      later: { card: limping, after: 2 }
+    - label: { ru: Искать брод выше по течению, en: Find a ford upstream }
+      effects: { miles: -5 }
+
+- id: limping
+  biomes: [forest]
+  scheduledOnly: true
+  text:
+    ru: После того льда {horse} начинает прихрамывать. Никто не признаётся, что видел, как это случилось.
+    en: Ever since that ice {horse} has been limping. Nobody admits seeing the slip.
+  choices:
+    - label: { ru: Остановиться и перевязать, en: Stop and bandage it }
+      effects: { money: -10, threat: -4, subjectStamina: 10 }
+    - label: { ru: «Работает — не трогай», en: "If it works, don't touch it" }
+      effects: { subjectStamina: -20 }
+
+- id: hay_cart
+  biomes: [forest]
+  text:
+    ru: Брошенная телега с сеном. Хозяина не видно, следы замело.
+    en: An abandoned hay cart. No owner in sight, tracks snowed over.
+  choices:
+    - label: { ru: Забрать сено, en: Take the hay }
+      effects: { stamina: 10, threat: -3 }
+    - label: { ru: Не задерживаться, en: Don't linger }
+      effects: {}
+
+- id: hunt_horns
+  biomes: [forest]
+  text:
+    ru: Далеко позади трубят рога. Дикая охота взяла след.
+    en: Horns blow far behind. The Wild Hunt has caught the scent.
+  choices:
+    - label: { ru: Погасить фонари и ехать тихо, en: Douse the lanterns and creep on }
+      effects: { miles: -3, threat: 5 }
+    - label: { ru: Гнать, пока есть силы, en: Run while you can }
+      effects: { stamina: -8, miles: 6 }
+
+- id: forester_toll
+  biomes: [forest]
+  text:
+    ru: Лесничий перегородил дорогу шлагбаумом. «Пошлина за проезд, пятнадцать монет».
+    en: A forester has barred the road. "Toll's fifteen coins."
+  choices:
+    - label: { ru: Заплатить, en: Pay the toll }
+      effects: { money: -15 }
+    - label: { ru: Свернуть на старую дорогу, en: Take the old road }
+      effects: { miles: -4, setFlags: [angry_forester] }
+
+- id: forester_returns
+  biomes: [forest]
+  requires: { flags: [angry_forester] }
+  weight: 3
+  text:
+    ru: Лесничий нагнал вас, и с ним двое стражников. Он помнит, как вы объехали шлагбаум.
+    en: The forester has caught up, with two guards. He remembers you dodging his toll.
+  choices:
+    - label: { ru: Заплатить штраф, en: Pay the fine }
+      effects: { money: -30, clearFlags: [angry_forester] }
+    - label: { ru: Откупиться представлением, en: Pay with a show }
+      effects: { stamina: -10, threat: -5, clearFlags: [angry_forester] }
+
+- id: morning_standup
+  biomes: [forest]
+  once: false
+  weight: 0.5
+  text:
+    ru: Утренняя планёрка в санях затянулась на час. {horse} рассказывает про блокеры.
+    en: The morning stand-up in the sleigh drags on for an hour. {horse} is listing blockers.
+  choices:
+    - label: { ru: Дослушать до конца, en: Hear it out }
+      effects: { threat: -4, stamina: 4 }
+    - label: { ru: Оборвать на полуслове, en: Cut it short }
+      effects: { subjectStamina: -6, miles: 3 }
+
+- id: blizzard
+  biomes: [forest]
+  timer: 6
+  defaultChoice: 0
+  text:
+    ru: Метель! В двух шагах ничего не видно. Решайте быстро.
+    en: Blizzard! You can't see two steps ahead. Decide fast.
+  choices:
+    - label: { ru: Сбиться в кучу и переждать, en: Huddle up and wait }
+      effects: { threat: -6, stamina: 5 }
+    - label: { ru: Идти сквозь бурю, en: Push through the storm }
+      effects: { stamina: -10, miles: 5 }
+
+- id: oat_merchant
+  biomes: [forest]
+  requires: { minMoney: 20 }
+  text:
+    ru: Торговец на санях продаёт овёс. Дорого, но лошади уже смотрят на мешки.
+    en: A merchant on a sleigh sells oats. Pricey, but the horses are eyeing the sacks.
+  choices:
+    - label: { ru: Купить мешок за 20, en: Buy a sack for 20 }
+      effects: { money: -20, stamina: 15 }
+    - label: { ru: Пройти мимо, en: Walk on }
+      effects: {}

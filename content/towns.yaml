@@ -1,0 +1,25 @@
+# Порядок = маршрут. distance — длина перегона ДО этого города, biome — местность перегона.
+- id: start_village
+  name: { ru: Гнилые Пни, en: Rotten Stumps }
+  wealth: 0.6
+  maxShows: 1
+- id: tar_mill
+  name: { ru: Дегтярня, en: Tar Mill }
+  wealth: 0.8
+  distance: 35
+  biome: forest
+- id: owl_cross
+  name: { ru: Совиный Перекрёсток, en: Owl Crossing }
+  wealth: 1.2
+  distance: 40
+  biome: forest
+- id: fir_market
+  name: { ru: Еловый Торг, en: Fir Market }
+  wealth: 1.6
+  distance: 45
+  biome: forest
+- id: winter_quarters
+  name: { ru: Зимовье, en: Winter Quarters }
+  wealth: 1
+  distance: 50
+  biome: forest
